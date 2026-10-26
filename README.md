@@ -76,17 +76,6 @@ The output file is generated here:
 day1-api-extraction/output/customers_clean.csv
 ```
 
-## Roadmap
-
-This repository is designed to grow into a broader portfolio of data engineering work. Future projects will likely cover topics such as:
-
-- ETL pipelines
-- Data quality checks
-- SQL and warehouse workflows
-- Data modeling
-- Reporting and visualization
-- Automation and workflow orchestration
-
 ## Notes
 
 This first project is a practical starting point. It is meant to show a clear and useful workflow from raw API data to a cleaned, usable dataset that can support analysis and downstream reporting.
