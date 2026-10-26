@@ -11,10 +11,10 @@ The repository currently covers the first delivery of the pipeline:
 
 ## Repo layout
 
-- `day1-api-extraction/` — the working extraction pipeline
-  - `extract_customers.py` — pulls customer data, flattens nested fields, and writes CSV output
-  - `requirements.txt` — Python dependencies
-  - `output/customers_clean.csv` — exported dataset
+- `day1-api-extraction/` - the working extraction pipeline
+  - `extract_customers.py` - pulls customer data, flattens nested fields, and writes CSV output
+  - `requirements.txt` - Python dependencies
+  - `output/customers_clean.csv` - exported dataset
 
 ## Day 1 pipeline
 
