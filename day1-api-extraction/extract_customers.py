@@ -50,7 +50,6 @@ def fetch_users(url: str = API_URL, timeout: float = 10.0) -> list[dict]:
         sys.exit(1)
 
 
-  
 def describe_structure(payload) -> None:
     """Print what Python types, the payload and one record are made of
     (the top-level container, a record, and each nested value)."""
@@ -78,8 +77,7 @@ def describe_structure(payload) -> None:
                     print(f"    - {nested_key}: {type(nested_value).__name__}")
         else:
             print(f" - {key}: {type(value).__name__}")
-    print()
-   
+    print()   
 
 
 def extract_core_fields(users: list[dict]) -> list[dict]:
@@ -102,7 +100,6 @@ def extract_core_fields(users: list[dict]) -> list[dict]:
 
     # Return list of extracted values
     return extracted 
-
 
 
 def build_structures(users: list[dict]) -> tuple[list, list[tuple], dict]:
@@ -222,7 +219,6 @@ def main() -> None:
     # Export to CSV
     saved_data_path = export_csv(df)
     print(f"\nCleaned data exported to: {saved_data_path}")
-
 
 
 if __name__ == "__main__":
