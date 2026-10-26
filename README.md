@@ -1,35 +1,67 @@
-# Duka Connect Analytics
+# Simple DE Projects
 
-This project is a small data engineering exercise for Duka Connect, Nairobi B2B distributor. The team needs customer data from a partner API in a flat, analysis-ready format so it can be joined with internal sales records.
+This repository is a collection of projects that showcase practical data engineering skills. It is meant to capture the work I have done so far and provide a structure for future projects as I continue to build on the same foundations.
 
-## What is in this repo
+## Purpose
 
-The repository currently covers the first delivery of the pipeline:
+The aim of this repository is to show how data engineering work turns raw, messy, or fragmented information into structured outputs that can be used for analysis, reporting, and downstream business decisions.
 
-- Day 1 API extraction: fetch data from a REST endpoint, inspect the structure, flatten nested JSON, and export a cleaned CSV.
-- Output: a ready-to-use customer dataset in CSV format.
+## Current project
 
-## Repo layout
+### [Day 1: Duka Connect Analytics](day1-api-extraction)
 
-- `day1-api-extraction/` - the working extraction pipeline
-  - `extract_customers.py` - pulls customer data, flattens nested fields, and writes CSV output
-  - `requirements.txt` - Python dependencies
-  - `output/customers_clean.csv` - exported dataset
+This is the first project in the portfolio. It focuses on a real-world scenario in which a Nairobi-based distributor needs customer records from a partner API in a flat and analysis-ready format.
 
-## Day 1 pipeline
+The project includes the following work:
 
-The current script does a few core jobs:
+- Pulling data from a REST API
+- Validating the HTTP response and JSON payload
+- Reviewing the structure of the source data
+- Extracting the fields needed for analysis
+- Flattening nested JSON into a simple tabular format
+- Exporting a cleaned CSV for joining with internal business data
 
-1. Calls the JSONPlaceholder users API.
-2. Validates the HTTP response and JSON payload.
-3. Prints a quick view of the data structure.
-4. Pulls the key customer fields needed for analysis.
-5. Recursively flattens nested objects such as address and company data into column names like `address_city` and `company_name`.
-6. Converts the flattened records into a pandas DataFrame and exports a cleaned CSV.
+## Repository layout
+
+```text
+Simple-DE-Projects/
+├── README.md
+├── day1-api-extraction/
+│   ├── README.md
+│   ├── extract_customers.py
+│   ├── requirements.txt
+│   └── output/
+│       └── customers_clean.csv
+```
+
+## Day 1 workflow
+
+The first project follows a simple but important data engineering flow:
+
+1. Fetch data from the API.
+2. Check that the request succeeded.
+3. Validate the response body.
+4. Inspect the structure of the records.
+5. Pull the required customer information.
+6. Flatten nested fields such as address and company details.
+7. Convert the output to a pandas DataFrame.
+8. Save the final result as a CSV.
+
+## Skills demonstrated
+
+This project shows a useful set of core data engineering capabilities:
+
+- API extraction
+- Data validation
+- Handling nested JSON
+- Recursive flattening
+- Data cleaning and normalization
+- Pandas-based transformation
+- CSV output for analytics use cases
 
 ## Quick start
 
-From the project root:
+From the project root, run:
 
 ```bash
 python3 -m venv .venv
@@ -38,13 +70,24 @@ pip install -r day1-api-extraction/requirements.txt
 python day1-api-extraction/extract_customers.py
 ```
 
-This writes the output to:
+The output file is generated here:
 
 ```text
 day1-api-extraction/output/customers_clean.csv
 ```
 
+## Roadmap
+
+This repository is designed to grow into a broader portfolio of data engineering work. Future projects will likely cover topics such as:
+
+- ETL pipelines
+- Data quality checks
+- SQL and warehouse workflows
+- Data modeling
+- Reporting and visualization
+- Automation and workflow orchestration
+
 ## Notes
 
-This is a first-pass, practical ETL flow. It is designed to prove the approach: pull the data, normalize it, and generate a clean CSV for downstream analysis.
+This first project is a practical starting point. It is meant to show a clear and useful workflow from raw API data to a cleaned, usable dataset that can support analysis and downstream reporting.
 
