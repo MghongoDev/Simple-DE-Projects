@@ -1,25 +1,49 @@
 # Simple DE Projects
 
-This repository is a collection of projects that showcase practical data engineering skills. It is meant to capture the work I have done so far and provide a structure for future projects as I continue to build on the same foundations.
+A portfolio of small Python projects about extracting, cleaning, and preparing data for analysis. Each project has its own instructions, dependencies, and sample or output data.
 
-## Purpose
+## Projects
 
-The aim of this repository is to show how data engineering work turns raw, messy, or fragmented information into structured outputs that can be used for analysis, reporting, and downstream business decisions.
+| Project | What it does | Status |
+|---|---|---|
+| [Day 1: API extraction](day1-api-extraction/README.md) | Fetches customer records from JSONPlaceholder, flattens nested fields, and writes a CSV. | Runnable |
+| [Day 2: Multi-file transaction pipeline](day2-multi-file-pipeline/) | Processes Soko Fresh daily transaction CSVs, checks rows, handles the `qty` column change and duplicate IDs, and prepares accepted and rejected records. | Runnable |
 
-## Current project
+The Day 1 project demonstrates HTTP requests, JSON handling, data cleaning, and CSV export. Day 2 processes daily sales files and reports both accepted and rejected transactions.
 
-### [Day 1: Duka Connect Analytics](day1-api-extraction)
+## Run Day 1
 
-This is the first project in the portfolio. It focuses on a real-world scenario in which a Nairobi-based distributor needs customer records from a partner API in a flat and analysis-ready format.
+Requirements: Python 3 and an internet connection to reach the JSONPlaceholder API.
 
-The project includes the following work:
+From the repository root, create a virtual environment and install the project dependencies:
 
-- Pulling data from a REST API
-- Validating the HTTP response and JSON payload
-- Reviewing the structure of the source data
-- Extracting the fields needed for analysis
-- Flattening nested JSON into a simple tabular format
-- Exporting a cleaned CSV for joining with internal business data
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r day1-api-extraction/requirements.txt
+```
+
+Run the script from its project folder so it writes the CSV to the expected location:
+
+```bash
+cd day1-api-extraction
+python extract_customers.py
+```
+
+The script saves the result to [day1-api-extraction/output/customers_clean.csv](day1-api-extraction/output/customers_clean.csv). See the [Day 1 README](day1-api-extraction/README.md) for implementation details.
+
+## Run Day 2
+
+Requirements: Python 3.8 or later. The pipeline uses only Python's standard library, so it needs no package installation.
+
+From the repository root, run:
+
+```bash
+cd day2-multi-file-pipeline
+python pipeline.py --input data/ --output output/
+```
+
+The pipeline writes accepted transactions to `output/consolidated_transactions.csv`, rejected rows with reasons to `output/rejected_transactions.csv`, and run counts to `output/summary.txt`. See the [Day 2 README](day2-multi-file-pipeline/README.md) for how validation and duplicate handling work.
 
 ## Repository layout
 
@@ -32,51 +56,17 @@ Simple-DE-Projects/
 │   ├── requirements.txt
 │   └── output/
 │       └── customers_clean.csv
+└── day2-multi-file-pipeline/
+    ├── README.md
+    ├── pipeline.py
+    ├── requirements.txt
+    ├── test_pipeline.py
+    ├── data/
+    │   └── transactions_2026-10-*.csv
+    └── output/
+        ├── consolidated_transactions.csv
+        ├── rejected_transactions.csv
+        └── summary.txt
 ```
 
-## Day 1 workflow
-
-The first project follows a simple but important data engineering flow:
-
-1. Fetch data from the API.
-2. Check that the request succeeded.
-3. Validate the response body.
-4. Inspect the structure of the records.
-5. Pull the required customer information.
-6. Flatten nested fields such as address and company details.
-7. Convert the output to a pandas DataFrame.
-8. Save the final result as a CSV.
-
-## Skills demonstrated
-
-This project shows a useful set of core data engineering capabilities:
-
-- API extraction
-- Data validation
-- Handling nested JSON
-- Recursive flattening
-- Data cleaning and normalization
-- Pandas-based transformation
-- CSV output for analytics use cases
-
-## Quick start
-
-From the project root, run:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r day1-api-extraction/requirements.txt
-python day1-api-extraction/extract_customers.py
-```
-
-The output file is generated here:
-
-```text
-day1-api-extraction/output/customers_clean.csv
-```
-
-## Notes
-
-This first project is a practical starting point. It is meant to show a clear and useful workflow from raw API data to a cleaned, usable dataset that can support analysis and downstream reporting.
-
+Each project keeps its own README and `requirements.txt`. Follow those files when setting up or running a project.
