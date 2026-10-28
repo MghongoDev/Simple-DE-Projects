@@ -6,7 +6,7 @@ A portfolio of small Python projects about extracting, cleaning, and preparing d
 
 | Project | What it does | Status |
 |---|---|---|
-| [Day 1: API extraction](day1-api-extraction/README.md) | Fetches customer records from JSONPlaceholder, flattens nested fields, and writes a CSV. | Runnable |
+| [Day 1: API extraction](day1-api-extraction/) | Fetches customer records from JSONPlaceholder, flattens nested fields, and writes a CSV. | Runnable |
 | [Day 2: Multi-file transaction pipeline](day2-multi-file-pipeline/) | Processes Soko Fresh daily transaction CSVs, checks rows, handles the `qty` column change and duplicate IDs, and prepares accepted and rejected records. | Runnable |
 
 The Day 1 project demonstrates HTTP requests, JSON handling, data cleaning, and CSV export. Day 2 processes daily sales files and reports both accepted and rejected transactions.
@@ -43,7 +43,7 @@ cd day2-multi-file-pipeline
 python pipeline.py --input data/ --output output/
 ```
 
-The pipeline writes accepted transactions to `output/consolidated_transactions.csv`, rejected rows with reasons to `output/rejected_transactions.csv`, and run counts to `output/summary.txt`. See the [Day 2 README](day2-multi-file-pipeline/README.md) for how validation and duplicate handling work.
+The pipeline writes accepted transactions to [day2-multi-file-pipeline/output/consolidated_transactions.csv](day2-multi-file-pipeline/output/consolidated_transactions.csv)`, rejected rows with reasons to [day2-multi-file-pipeline/output/rejected_transactions.csv](day2-multi-file-pipeline/output/rejected_transactions.csv), and run counts to [day2-multi-file-pipeline/output/summary.txt](day2-multi-file-pipeline/output/summary.txt). See the [Day 2 README](day2-multi-file-pipeline/README.md) for how validation and duplicate handling work.
 
 ## Repository layout
 
