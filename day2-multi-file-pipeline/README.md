@@ -22,9 +22,3 @@ The pipeline uses a global `seen_ids` set that persists across all files. As it 
 ### 4. Rejected Records
 The `rejected_transactions.csv` captures every row that fails validation. It prepends the `source_file` and `row_number` (starting at 2 for the first data row) so finance can easily locate the error in the original file. Reasons are joined by semicolons (e.g., `missing customer_id; invalid quantity (not a number)`).
 
-## How to Run
-
-1. Ensure you have Python 3.8+ installed.
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
