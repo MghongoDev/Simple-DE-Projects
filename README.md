@@ -8,8 +8,9 @@ A portfolio of small Python projects about extracting, cleaning, and preparing d
 |---|---|---|
 | [Day 1: API extraction](day1-api-extraction/) | Fetches customer records from JSONPlaceholder, flattens nested fields, and writes a CSV. | Runnable |
 | [Day 2: Multi-file transaction pipeline](day2-multi-file-pipeline/) | Processes Soko Fresh daily transaction CSVs, checks rows, handles the `qty` column change and duplicate IDs, and prepares accepted and rejected records. | Runnable |
+| [Day 3: Incremental ETL pipeline](day3-incremental-etl/) | Loads JSON transaction batches into a CSV warehouse, classifies records, and tracks processed batches to prevent reprocessing. | Runnable |
 
-The Day 1 project demonstrates HTTP requests, JSON handling, data cleaning, and CSV export. Day 2 processes daily sales files and reports both accepted and rejected transactions.
+Day 1 demonstrates HTTP requests, JSON handling, data cleaning, and CSV export. Day 2 processes daily sales files and reports accepted and rejected transactions. Day 3 applies new or newer transaction records from JSON batches and skips batches already recorded in its checkpoint.
 
 ## Run Day 1
 
@@ -45,6 +46,19 @@ python pipeline.py --input data/ --output output/
 
 The pipeline writes accepted transactions to [day2-multi-file-pipeline/output/consolidated_transactions.csv](day2-multi-file-pipeline/output/consolidated_transactions.csv)`, rejected rows with reasons to [day2-multi-file-pipeline/output/rejected_transactions.csv](day2-multi-file-pipeline/output/rejected_transactions.csv), and run counts to [day2-multi-file-pipeline/output/summary.txt](day2-multi-file-pipeline/output/summary.txt). See the [Day 2 README](day2-multi-file-pipeline/README.md) for how validation and duplicate handling work.
 
+## Run Day 3
+
+Requirements: Python 3. The pipeline uses only the standard library, so it needs no package installation.
+
+Run it from its project folder so the relative data, incoming, state, and logs paths resolve correctly:
+
+```bash
+cd day3-incremental-etl
+python incremental_etl.py
+```
+
+The script reads unprocessed JSON batches from `incoming/`, updates [day3-incremental-etl/data/transactions.csv](day3-incremental-etl/data/transactions.csv), records processed batch IDs in [day3-incremental-etl/state/checkpoint.json](day3-incremental-etl/state/checkpoint.json), and writes run details to [day3-incremental-etl/logs/etl.log](day3-incremental-etl/logs/etl.log). It rejects invalid records and older updates, ignores exact duplicates, and accepts updates only when their `updated_at` timestamp is newer. See the [Day 3 README](day3-incremental-etl/README.md) for the classification rules and write-safety details.
+
 ## Repository layout
 
 ```text
@@ -56,17 +70,29 @@ Simple-DE-Projects/
 │   ├── requirements.txt
 │   └── output/
 │       └── customers_clean.csv
-└── day2-multi-file-pipeline/
+├── day2-multi-file-pipeline/
+│   ├── README.md
+│   ├── pipeline.py
+│   ├── requirements.txt
+│   ├── test_pipeline.py
+│   ├── data/
+│   │   └── transactions_2026-10-*.csv
+│   └── output/
+│       ├── consolidated_transactions.csv
+│       ├── rejected_transactions.csv
+│       └── summary.txt
+└── day3-incremental-etl/
     ├── README.md
-    ├── pipeline.py
+    ├── incremental_etl.py
     ├── requirements.txt
-    ├── test_pipeline.py
     ├── data/
-    │   └── transactions_2026-10-*.csv
-    └── output/
-        ├── consolidated_transactions.csv
-        ├── rejected_transactions.csv
-        └── summary.txt
+    │   └── transactions.csv
+    ├── incoming/
+    │   └── batch_*.json
+    ├── logs/
+    │   └── etl.log
+    └── state/
+        └── checkpoint.json
 ```
 
 Each project keeps its own README and `requirements.txt`. Follow those files when setting up or running a project.
