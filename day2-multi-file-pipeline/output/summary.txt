@@ -9,4 +9,4 @@ Rows rejected:           9
   - invalid numbers:     2
   - duplicate IDs:       3
 Total revenue (KES):     22,775
-Run finished at:         2026-10-28T14:27:00.567151
+Run finished at:         2026-10-28T14:48:09.023673
