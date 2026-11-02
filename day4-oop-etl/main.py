@@ -35,7 +35,7 @@ class RunSummary:
     duration: float = 0.0
     status: str = "SUCCESS"
 
-    # Counts how many records were rejected for each distinct reason,
+    # Counts how many records were rejected for each distinct reason
     rejection_reasons: dict[str, int] = field(default_factory=dict)
 
     def report(self) -> str:

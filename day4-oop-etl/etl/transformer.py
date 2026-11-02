@@ -169,7 +169,7 @@ class DataTransformer:
 
     # Orchestration  
     def transform(self, records: list[dict[str, Any]]) -> list[dict[str, Any]]:
-        """Process all records; return the valid ones and stash the rest."""
+        """Process all records. Return the valid ones and stash the rest."""
         valid_records: list[dict[str, Any]] = []
         # Reset so a reused instance does not mix in rejections from a
         # previous pipeline run.
