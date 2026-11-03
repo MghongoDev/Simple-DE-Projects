@@ -37,12 +37,12 @@ def setup_logging(path: Path = LOG_PATH) -> logging.Logger:
     # Define the log format
     formatter = logging.Formatter('%(asctime)s %(levelname)-5s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
     
-    # 1. Define console handler that prints to the terminal
+    # 1. Console handler (prints to the terminal)
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
     
-    # 2. Define file handler that appends to the log file
+    # 2. File handler (appends to the log file)
     file_handler = logging.FileHandler(path, mode='a', encoding='utf-8')
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
@@ -52,7 +52,6 @@ def setup_logging(path: Path = LOG_PATH) -> logging.Logger:
 
 def load_existing(path: Path = WAREHOUSE_PATH) -> dict[str, dict]:
     """Read the loaded transactions into a dict keyed by transaction_id."""
-    # Initialize empty existing dictionary
     existing = {}
     
     # If the file doesn't exist yet, return an empty dictionary
@@ -65,7 +64,7 @@ def load_existing(path: Path = WAREHOUSE_PATH) -> dict[str, dict]:
         for row in reader:
             txn_id = row[KEY]
             
-            # Convert amount to float so it can be compared properly later
+            # Convert amount to float so we can compare it properly later
             if row.get("amount_kes"):
                 row["amount_kes"] = float(row["amount_kes"])
                 
@@ -90,7 +89,6 @@ def load_batch(path: Path) -> tuple[str, list[dict]]:
 
 def validate_record(record: dict) -> list[str]:
     """Return the reasons a batch record cannot be loaded (empty list means valid)."""
-    # Initialize empty reasons list
     reasons = []
     
     # 1. Check if transaction_id is missing
@@ -101,8 +99,8 @@ def validate_record(record: dict) -> list[str]:
     amount = record.get("amount_kes")
     if amount is not None:
         try:
-            # If it's a string with commas e.g "2,790.00", remove commas first
-            if isinstance(amt, str):
+            # If it's a string with commas (like "3,450.00"), remove commas first
+            if isinstance(amount, str):
                 amount = amount.replace(",", "")
                 
             val = float(amount)
@@ -121,7 +119,6 @@ def validate_record(record: dict) -> list[str]:
 
 def classify(existing: dict[str, dict], batch: list[dict]) -> dict[str, list[dict]]:
     """Split the batch into the buckets 'new', 'updated', 'duplicate' and 'invalid'."""
-    # Initialize buckets dictionary
     buckets = {
         "new": [], 
         "updated": [], 
@@ -129,7 +126,7 @@ def classify(existing: dict[str, dict], batch: list[dict]) -> dict[str, list[dic
         "invalid": []
     }
     
-    # Keep track of IDs seen in this specific batch to catch internal duplicates
+    # Keep track of IDs we see in this specific batch to catch internal duplicates
     batch_seen_ids = set()
     
     for record in batch:
@@ -154,7 +151,7 @@ def classify(existing: dict[str, dict], batch: list[dict]) -> dict[str, list[dic
         
         # 3. Compare with the existing warehouse data
         if txn_id not in existing:
-            # Append ompletely new transaction
+            # Completely new transaction
             buckets["new"].append(record)
         else:
             old_record = existing[txn_id]
@@ -165,7 +162,7 @@ def classify(existing: dict[str, dict], batch: list[dict]) -> dict[str, list[dic
                 old_val = str(old_record.get(field, ""))
                 new_val = str(record.get(field, ""))
                 
-                # Handle amount formatting by standardizing num of decimal places
+                # Handle amount formatting (e.g., "12500.00" vs "12500.0")
                 if field == "amount_kes":
                     if old_val:
                         old_val = f"{float(old_val):.2f}"
@@ -182,14 +179,14 @@ def classify(existing: dict[str, dict], batch: list[dict]) -> dict[str, list[dic
             if is_identical:
                 buckets["duplicate"].append(record)
             else:
-                # It's different, so check timestamps.
+                # It's different. Now we check timestamps.
                 old_time = old_record.get("updated_at", "")
                 new_time = record.get("updated_at", "")
                 
                 if new_time > old_time:
                     buckets["updated"].append(record)
                 else:
-                    # It's different, but older data so reject to avoid overwriting.
+                    # Different, but older data. Reject to avoid overwriting.
                     record["_reasons"] = "older version (updated_at is not newer)"
                     buckets["invalid"].append(record)
                     
@@ -198,7 +195,7 @@ def classify(existing: dict[str, dict], batch: list[dict]) -> dict[str, list[dic
 
 def upsert(existing: dict[str, dict], new: list[dict], updated: list[dict]) -> dict[str, dict]:
     """Return the merged state: inserts for new keys, replacements for updated keys."""
-    # Make a copy of the existing data so original isn't modified while looping
+    # Make a copy of the existing data so we don't modify the original while looping
     merged_state = dict(existing)
     
     # Add new records
@@ -245,7 +242,7 @@ def write_checkpoint(checkpoint: dict, path: Path = CHECKPOINT_PATH) -> None:
     with open(temp_path, "w", encoding="utf-8") as f:
         json.dump(checkpoint, f, indent=2)
         
-    # Rename the temp file to the real filename to overwrite the old one safely
+    # Rename the temp file to the real filename (this overwrites the old one safely)
     Path(temp_path).replace(path)
 
 
@@ -267,7 +264,7 @@ def save_warehouse(state: dict[str, dict], path: Path = WAREHOUSE_PATH) -> None:
         
         for txn_id in sorted_keys:
             row = state[txn_id]
-            # Create a clean dictionary with only the wanted fields
+            # Create a clean dictionary with only the fields we want
             clean_row = {}
             for key in fieldnames:
                 clean_row[key] = row.get(key)
@@ -312,7 +309,7 @@ def run() -> dict:
         if not batch_id:
             continue
             
-        # Skip if batch already processed according to the checkpoint
+        # Skip if we've already processed this batch according to the checkpoint
         if batch_id in checkpoint["processed_batches"]:
             logger.info(f"Batch {batch_id} already processed - skipping")
             continue
@@ -340,7 +337,7 @@ def run() -> dict:
             reason = inv.get("_reasons", "unknown error")
             logger.warning(f"Invalid record {id_val}: {reason}")
             
-        # Apply the changes to in-memory dictionary
+        # Apply the changes to our in-memory dictionary
         existing_data = upsert(existing_data, buckets["new"], buckets["updated"])
         batches_processed.append(batch_id)
         
