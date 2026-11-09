@@ -86,7 +86,7 @@ def extract_core_fields(users: list[dict]) -> list[dict]:
     extracted = []
     for user in users:
         # Use .get() to prevent errors on missing keys and extract nested data with defaults
-        city = user.get("address", {}).get("city", "Unkown")
+        city = user.get("address", {}).get("city", "Unknown")
         company = user.get("company", {}).get("name", "Unknown")
 
         # Append user details to empty list
